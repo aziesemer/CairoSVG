@@ -110,7 +110,8 @@ class Surface(object):
     @classmethod
     def convert(cls, bytestring=None, *, file_obj=None, url=None, dpi=96,
                 parent_width=None, parent_height=None, scale=1, unsafe=False,
-                write_to=None, tree_obj=None, **kwargs):
+                write_to=None, tree_obj=None,
+                output_width=None, output_height=None, **kwargs):
         """Convert a SVG document to the format for this class.
 
         Specify the input by passing one of these:
@@ -168,7 +169,8 @@ class Surface(object):
         for tree in trees:
             if instance is None:
                 instance = cls(tree, output, dpi, None, parent_width,
-                               parent_height, scale)
+                               parent_height, scale,
+                               output_width, output_height))
             else:
                 instance.addPage(tree, parent_width, parent_height, scale)
 
@@ -178,7 +180,8 @@ class Surface(object):
             return output.getvalue()
 
     def __init__(self, tree, output, dpi, parent_surface=None,
-                 parent_width=None, parent_height=None, scale=1):
+                 parent_width=None, parent_height=None, scale=1,
+                 output_width=None, output_height=None):
         """Create the surface from a filename or a file-like object.
 
         The rendered content is written to ``output`` which can be a filename,
@@ -215,8 +218,16 @@ class Surface(object):
         self.font_size = size(self, '12pt')
         self.stroke_and_fill = True
         width, height, viewbox = node_format(self, tree)
-        width *= scale
-        height *= scale
+        if output_width:
+            scale = output_width / width
+        elif output_height:
+            scale = output_height / height
+
+        if output_width and output_height:
+            width, height = output_width, output_height
+        else:
+            width *= scale
+            height *= scale
         # Actual surface dimensions: may be rounded on raster surfaces types
         self.cairo, self.width, self.height = self._create_surface(
             width * self.device_units_per_user_units,
@@ -226,8 +237,12 @@ class Surface(object):
         self.context.scale(
             self.device_units_per_user_units, self.device_units_per_user_units)
         # Initial, non-rounded dimensions
-        self.set_context_size(
-            width, height, viewbox, scale, preserved_ratio(tree))
+        if output_width and output_height:
+             self.set_context_size(
+                 width, height, viewbox, scale, tree)
+        else:
+             self.set_context_size(
+                 width, height, viewbox, scale, preserved_ratio(tree))
         self.context.move_to(0, 0)
         self.draw(tree)
 
