@@ -39,38 +39,46 @@ SURFACES = {
 
 def svg2svg(bytestring=None, *, file_obj=None, url=None, dpi=96,
             parent_width=None, parent_height=None, scale=1, unsafe=False,
-            write_to=None):
+            write_to=None, output_width=None, output_height=None,
+            tree_obj=None):
     return surface.SVGSurface.convert(
         bytestring=bytestring, file_obj=file_obj, url=url, dpi=dpi,
         parent_width=parent_width, parent_height=parent_height, scale=scale,
-        unsafe=unsafe, write_to=write_to)
+        unsafe=unsafe, write_to=write_to, output_width=output_width,
+        output_height=output_height, tree_obj=tree_obj)
 
 
 def svg2png(bytestring=None, *, file_obj=None, url=None, dpi=96,
             parent_width=None, parent_height=None, scale=1, unsafe=False,
-            write_to=None):
+            write_to=None, output_width=None, output_height=None,
+            tree_obj=None):
     return surface.PNGSurface.convert(
         bytestring=bytestring, file_obj=file_obj, url=url, dpi=dpi,
         parent_width=parent_width, parent_height=parent_height, scale=scale,
-        unsafe=unsafe, write_to=write_to)
+        unsafe=unsafe, write_to=write_to, output_width=output_width,
+        output_height=output_height, tree_obj=tree_obj)
 
 
 def svg2pdf(bytestring=None, *, file_obj=None, url=None, dpi=96,
             parent_width=None, parent_height=None, scale=1, unsafe=False,
-            write_to=None):
+            write_to=None, output_width=None, output_height=None,
+            tree_obj=None):
     return surface.PDFSurface.convert(
         bytestring=bytestring, file_obj=file_obj, url=url, dpi=dpi,
         parent_width=parent_width, parent_height=parent_height, scale=scale,
-        unsafe=unsafe, write_to=write_to)
+        unsafe=unsafe, write_to=write_to, output_width=output_width,
+        output_height=output_height, tree_obj=tree_obj)
 
 
 def svg2ps(bytestring=None, *, file_obj=None, url=None, dpi=96,
            parent_width=None, parent_height=None, scale=1, unsafe=False,
-           write_to=None):
+           write_to=None, output_width=None, output_height=None,
+           tree_obj=None):
     return surface.PSSurface.convert(
         bytestring=bytestring, file_obj=file_obj, url=url, dpi=dpi,
         parent_width=parent_width, parent_height=parent_height, scale=scale,
-        unsafe=unsafe, write_to=write_to)
+        write_to=write_to, output_width=output_width,
+        output_height=output_height, tree_obj=tree_obj)
 
 
 svg2svg.__doc__ = surface.Surface.convert.__doc__.replace(
